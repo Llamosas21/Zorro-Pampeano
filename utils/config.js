@@ -2,9 +2,9 @@
 
 export const CONFIG = {
     // Velocidades físicas realistas (en píxeles por segundo)
-    GAME_SPEED: 300,               // Velocidad del scroll (px/s)
+    GAME_SPEED: 600,               // Velocidad del scroll (px/s)
     GRAVITY: 150,                 // Gravedad base (px/s²)
-    PLAYER_JUMP_FORCE: 80,        // Fuerza de salto (velocidad hacia arriba en px/s)
+    PLAYER_JUMP_FORCE: 55,        // Fuerza de salto (velocidad hacia arriba en px/s)
 
     // Multiplicadores de gravedad
     JUMP_GRAVITY_MULTIPLIER: 3.5,  // Subida: menos gravedad
