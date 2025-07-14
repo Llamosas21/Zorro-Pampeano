@@ -1,0 +1,43 @@
+/*Estilos Visuales*/
+
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+body {
+    background: #cceeff;
+    margin: 0;
+    padding: 0;
+}
+
+#juego {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #cceeff;
+}
+
+canvas {
+    background: #88bb77;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    touch-action: manipulation;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* Controles y botones eliminados */

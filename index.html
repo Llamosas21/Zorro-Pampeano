@@ -1,20 +1,31 @@
+<!-- Estructura del Juego -->
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zorro Pampeano</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Juego del Zorro</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div id="game-container">
-        <canvas id="game-canvas"></canvas>
-        <div id="game-over-screen">
-            <h1>Game Over</h1>
-            <button id="restart-button">Reiniciar</button>
-        </div>
-    </div>
 
-    <script type="module" src="game.js"></script>
+<body>
+    <div id="orientacion" style="display:none;position:fixed;z-index:10;top:0;left:0;width:100vw;height:100vh;background:#222c;backdrop-filter:blur(2px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;text-align:center;">
+        Gira tu dispositivo a horizontal para jugar
+    </div>
+    <div id="juego" style="width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;">
+        <canvas id="gameCanvas"></canvas>
+    </div>
+    <script src="game.js"></script>
+    <script>
+        function chequearOrientacion() {
+            var horizontal = window.innerWidth > window.innerHeight;
+            document.getElementById('orientacion').style.display = horizontal ? 'none' : 'flex';
+            document.getElementById('juego').style.display = horizontal ? 'flex' : 'none';
+        }
+        window.addEventListener('resize', chequearOrientacion);
+        window.addEventListener('orientationchange', chequearOrientacion);
+        window.addEventListener('DOMContentLoaded', chequearOrientacion);
+    </script>
 </body>
+
 </html>
