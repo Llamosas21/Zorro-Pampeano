@@ -148,7 +148,8 @@ export function iniciarBucle() {
         //estadoJuego.juegoTerminado = true;
       }
 
-      // --- Lógica de cambio de fondo con transición (orden: bosque, cueva, nieve) ---
+      // --- Lógica de cambio de fondo con transición 
+      // (orden: bosque, cueva, nieve) ---
       if (!enTransicion) {
         if (estadoJuego.puntaje >= 50 && fondoActual === 0) {
           fondoSiguiente = 2; // Nieve
