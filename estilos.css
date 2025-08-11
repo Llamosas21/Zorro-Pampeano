@@ -1,0 +1,43 @@
+@media (orientation: portrait) {
+  #orientacion-mensaje {
+    display: flex !important;
+  }
+  #lienzoJuego {
+    display: none !important;
+  }
+}
+body {
+  background: #2e2b1b;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+#lienzoJuego {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #6b8e23;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+button {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  background: #e67e22;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 #3e2c1e;
+}
+button:active {
+  background: #d35400;
+}
