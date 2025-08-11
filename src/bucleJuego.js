@@ -6,7 +6,7 @@ import { Baya } from './entidades/baya.js';
 import { detectarColision } from './utilidades/colision.js';
 
 // Variables globales del juego
-// Estado global del juego
+
 export const estadoJuego = {
   zorro: null,
   obstaculo: null,
@@ -17,7 +17,6 @@ export const estadoJuego = {
   juegoTerminado: false,
   saltoPrevio: false // para detectar salto
 };
-
 
 
 export function iniciarBucle() {
@@ -66,10 +65,8 @@ export function iniciarBucle() {
   function bucle() {
     if (!estadoJuego.juegoTerminado) {
       // Velocidad y salto: parte de los valores ideales de 36 puntos, pero sigue aumentando
-      // velocidadBase = 13 (como a 36 puntos)
       const velocidadBase = 13;
       const velocidadActual = velocidadBase + Math.floor((estadoJuego.puntaje - 20) / 5);
-      // Fuerza de salto fija para que no disminuya con la velocidad
       estadoJuego.zorro.saltoFuerza = 17;
 
 
