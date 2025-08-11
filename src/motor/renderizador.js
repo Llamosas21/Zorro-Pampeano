@@ -75,9 +75,18 @@ export function renderizar(ctx, zorro, obstaculo, puntaje = 0, juegoTerminado = 
 
     // Fondo principal
     let x = Math.round(fondoOffset + offsetX);
+    // Dibuja desde fuera de pantalla izquierda para cubrir huecos
     while (x < ctx.canvas.width) {
       ctx.drawImage(fondoPrincipal, x, 0, anchoFondo, altoFondo);
       x += anchoFondo;
+    }
+    // Dibuja también si x > 0 (por si hay hueco a la izquierda)
+    if (fondoOffset + offsetX > 0) {
+      let xExtra = Math.round(fondoOffset + offsetX - anchoFondo);
+      while (xExtra >= -anchoFondo) {
+        ctx.drawImage(fondoPrincipal, xExtra, 0, anchoFondo, altoFondo);
+        xExtra -= anchoFondo;
+      }
     }
 
     // Fondo en transición (superposición con alpha)
@@ -88,6 +97,14 @@ export function renderizar(ctx, zorro, obstaculo, puntaje = 0, juegoTerminado = 
       while (x2 < ctx.canvas.width) {
         ctx.drawImage(fondoNuevo, x2, 0, anchoFondo, altoFondo);
         x2 += anchoFondo;
+      }
+      // También cubrir hueco izquierdo
+      if (fondoOffset + offsetX > 0) {
+        let x2Extra = Math.round(fondoOffset + offsetX - anchoFondo);
+        while (x2Extra >= -anchoFondo) {
+          ctx.drawImage(fondoNuevo, x2Extra, 0, anchoFondo, altoFondo);
+          x2Extra -= anchoFondo;
+        }
       }
       ctx.globalAlpha = 1.0;
     }
