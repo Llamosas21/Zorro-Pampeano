@@ -52,51 +52,47 @@ const frameInterval = 10; // menor = más rápido
 let fondoOffset = 0;
 let fondoVelocidad = 2;
 
-export function renderizar(ctx, zorro, obstaculo, puntaje = 0, juegoTerminado = false, bayas = [], obstaculos = []) {
-  // Fondo fijo, no cambia por puntaje
-  
- 
+export function renderizar(ctx, zorro, obstaculo, puntaje = 0, juegoTerminado = false, bayas = [], obstaculos = [], fondoInfo = {}) {
+  // Lógica de transición de fondo
+  const { fondoActual: fondoIdx = fondoActual, fondoSiguiente = null, transicionFondo = 0, enTransicion = false } = fondoInfo;
 
   // Ajustar velocidad del fondo según obstáculo
   fondoVelocidad = Math.max(1, Math.floor(obstaculo.velocidad * 0.5));
-  // Fondo con scroll infinito tipo runner
+  let jugando = !juegoTerminado;
 
-  let jugando = !juegoTerminado; // V
-
-  const fondo = fondos[fondoActual];
-  if (fondo.complete && fondo.naturalWidth > 0) {
+  const fondoPrincipal = fondos[fondoIdx];
+  if (fondoPrincipal.complete && fondoPrincipal.naturalWidth > 0) {
     ctx.imageSmoothingEnabled = false;
-    // Escalar el fondo para que cubra el alto disponible, pero centrar horizontalmente si sobra
-    const altoFondo = Math.round(ctx.canvas.height - 32); //V
-    const escala = altoFondo / fondo.naturalHeight;
-    const anchoFondo = Math.round(fondo.naturalWidth * escala); //V
-    const yFondo = 0;
-    // Centrar el fondo si sobra espacio horizontal
-    let offsetX = 0;
-    if (anchoFondo < ctx.canvas.width) {
-      offsetX = Math.round((ctx.canvas.width - anchoFondo) / 2); //V
-    }
-    // Actualizar offset para scroll
+    const altoFondo = Math.round(ctx.canvas.height - 32);
+    const escala = altoFondo / fondoPrincipal.naturalHeight;
+    const anchoFondo = Math.round(fondoPrincipal.naturalWidth * escala);
+    const offsetX = anchoFondo < ctx.canvas.width ? Math.round((ctx.canvas.width - anchoFondo) / 2) : 0;
+
     if (jugando) {
       fondoOffset = (fondoOffset - fondoVelocidad) % anchoFondo;
       if (fondoOffset > 0) fondoOffset -= anchoFondo;
     }
-    // Dibujar suficientes fondos para cubrir todo el canvas aunque el offset sea negativo
-    let x = Math.round(fondoOffset + offsetX); //V
+
+    // Fondo principal
+    let x = Math.round(fondoOffset + offsetX);
     while (x < ctx.canvas.width) {
-      ctx.drawImage(fondo, x, yFondo, anchoFondo, altoFondo);
+      ctx.drawImage(fondoPrincipal, x, 0, anchoFondo, altoFondo);
       x += anchoFondo;
     }
-    // Si el offset es positivo, cubrir el hueco inicial a la izquierda
-    if (fondoOffset + offsetX > 0) {
-      let x2 = Math.round(fondoOffset + offsetX - anchoFondo); //V 
-      while (x2 > -anchoFondo) {
-        ctx.drawImage(fondo, x2, yFondo, anchoFondo, altoFondo);
-        x2 -= anchoFondo;
+
+    // Fondo en transición (superposición con alpha)
+    if (enTransicion && fondoSiguiente !== null) {
+      ctx.globalAlpha = transicionFondo;
+      const fondoNuevo = fondos[fondoSiguiente];
+      let x2 = Math.round(fondoOffset + offsetX);
+      while (x2 < ctx.canvas.width) {
+        ctx.drawImage(fondoNuevo, x2, 0, anchoFondo, altoFondo);
+        x2 += anchoFondo;
       }
+      ctx.globalAlpha = 1.0;
     }
   } else {
-    ctx.fillStyle = '#7ec850';
+    ctx.fillStyle = null;
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
   }
   // Suelo

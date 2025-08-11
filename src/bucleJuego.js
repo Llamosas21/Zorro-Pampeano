@@ -1,7 +1,7 @@
 // Bucle principal y control de frames
 import { Zorro } from './entidades/zorro.js';
 import { Obstaculo } from './entidades/obstaculo.js';
-import { renderizar } from './motor/renderizador.js';
+import { renderizar, fondoActual as fondoActualRenderizador } from './motor/renderizador.js';
 import { Baya } from './entidades/baya.js';
 import { detectarColision } from './utilidades/colision.js';
 
@@ -18,6 +18,12 @@ export const estadoJuego = {
   saltoPrevio: false // para detectar salto
 };
 
+
+// Variables de transición de fondo
+export let fondoActual = 0;      // El que está en pantalla ahora
+let fondoSiguiente = null;       // El que viene
+let transicionFondo = 0;         // 0 = sin transición, 1 = completa
+let enTransicion = false;
 
 export function iniciarBucle() {
   // Inicialización robusta
@@ -137,8 +143,31 @@ export function iniciarBucle() {
       }
 
       // Colisión con el obstáculo único
+
       if (detectarColision(estadoJuego.zorro, estadoJuego.obstaculo)) {
-        estadoJuego.juegoTerminado = true;
+        //estadoJuego.juegoTerminado = true;
+      }
+
+      // --- Lógica de cambio de fondo con transición (orden: bosque, nieve, cueva) ---
+      if (!enTransicion) {
+        if (estadoJuego.puntaje >= 50 && fondoActual === 0) {
+          fondoSiguiente = 2; // Nieve
+          enTransicion = true;
+          transicionFondo = 0;
+        } else if (estadoJuego.puntaje >= 100 && fondoActual === 2) {
+          fondoSiguiente = 1; // Cueva
+          enTransicion = true;
+          transicionFondo = 0;
+        }
+      }
+      if (enTransicion) {
+        transicionFondo += 0.008; // Transición más suave
+        if (transicionFondo >= 1) {
+          fondoActual = fondoSiguiente;
+          fondoSiguiente = null;
+          enTransicion = false;
+          transicionFondo = 0;
+        }
       }
     }
     // Limpiar y renderizar
@@ -149,7 +178,9 @@ export function iniciarBucle() {
       estadoJuego.obstaculo,
       estadoJuego.puntaje,
       estadoJuego.juegoTerminado,
-      estadoJuego.bayas
+      estadoJuego.bayas,
+      [],
+      { fondoActual, fondoSiguiente, transicionFondo, enTransicion }
     );
     requestAnimationFrame(bucle);
   }
